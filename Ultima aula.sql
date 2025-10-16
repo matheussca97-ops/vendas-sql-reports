@@ -1,4 +1,4 @@
-create database vendas_sql_reporst;
+create database vendas_sql_reports;
 use vendas_sql_reporst;
 
 CREATE TABLE Products (
@@ -9,6 +9,7 @@ CREATE TABLE Products (
     Unit VARCHAR(100) NOT NULL,
     Price DECIMAL(10, 2) NOT NULL
 );
+
 
 CREATE TABLE Employees (
     EmployeeID INT AUTO_INCREMENT PRIMARY KEY,
@@ -26,11 +27,13 @@ CREATE TABLE Shippers (
     Phone VARCHAR(20)
 );
 
+
 CREATE TABLE Categories (
     CategoryID INT AUTO_INCREMENT PRIMARY KEY,
     CategoryName VARCHAR(100) NOT NULL,
     Description TEXT
 );
+
 
 CREATE TABLE Customers (
     CustomerID INT AUTO_INCREMENT PRIMARY KEY,
@@ -41,6 +44,7 @@ CREATE TABLE Customers (
     PostalCode VARCHAR(20),
     Country VARCHAR(100)
 );
+
 
 CREATE TABLE Suppliers (
     SupplierID INT AUTO_INCREMENT PRIMARY KEY,
@@ -62,9 +66,52 @@ CREATE TABLE OrderDetails (
 );
 
 
-LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/OrderDetails.csv'
-INTO TABLE orderDetails
-FIELDS TERMINATED BY ';'      
-ENCLOSED BY ''                
-LINES TERMINATED BY '\n'
-IGNORE 1 ROWS;
+CREATE TABLE Orders (
+    OrderID INT PRIMARY KEY,
+    CustomerID INT NOT NULL,
+    EmployeeID INT NOT NULL,
+    OrderDate DATE NOT NULL,
+    ShipperID INT NOT NULL
+);
+
+
+ALTER TABLE Products
+ADD CONSTRAINT FK_ProductSupplier
+FOREIGN KEY (SupplierID)
+REFERENCES Suppliers(SupplierID);
+
+
+ALTER TABLE Products
+ADD CONSTRAINT FK_ProductCategory
+FOREIGN KEY (CategoryID)
+REFERENCES Categories(CategoryID);
+
+
+ALTER TABLE Orders
+ADD CONSTRAINT FK_OrderCustomer
+FOREIGN KEY (CustomerID)
+REFERENCES Customers(CustomerID);
+
+
+ALTER TABLE Orders
+ADD CONSTRAINT FK_OrderEmployee
+FOREIGN KEY (EmployeeID)
+REFERENCES Employees(EmployeeID);
+
+
+ALTER TABLE Orders
+ADD CONSTRAINT FK_OrderShipper
+FOREIGN KEY (ShipperID)
+REFERENCES Shippers(ShipperID);
+
+
+ALTER TABLE OrderDetails
+ADD CONSTRAINT FK_DetailOrder
+FOREIGN KEY (OrderID)
+REFERENCES Orders(OrderID);
+
+
+ALTER TABLE OrderDetails
+ADD CONSTRAINT FK_DetailProduct
+FOREIGN KEY (ProductID)
+REFERENCES Products(ProductID);
