@@ -59,4 +59,7 @@ INTO TABLE orders
 FIELDS TERMINATED BY ';'      
 ENCLOSED BY ''                
 LINES TERMINATED BY '\n'
-IGNORE 1 ROWS;
+IGNORE 1 ROWS
+(OrderID, CustomerID, EmployeeID, @OrderDate, ShipperID)
+SET Orderdate = str_to_date(@OrderDate, '%d/%m/%Y')
+;
